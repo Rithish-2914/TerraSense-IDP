@@ -1,0 +1,263 @@
+/* ------------------------------------------------------------------
+   Storm hydrograph.
+
+   Laid out to survive the narrow control rail: the chart scales with
+   its viewBox, and everything around it stacks rather than competing
+   for horizontal space.
+------------------------------------------------------------------ */
+
+.hydrograph {
+  margin-top: var(--s-4);
+  padding: var(--s-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.hydrograph__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-bottom: var(--s-3);
+}
+
+.hydrograph__title h3 {
+  font-size: var(--t-title);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.hydrograph__title p {
+  margin-top: 2px;
+  font-size: var(--t-caption);
+  line-height: var(--lh-snug);
+  color: var(--text-muted);
+}
+
+.hydrograph__head .btn-inline { flex: none; width: auto; }
+
+/* --- Headline figures --------------------------------------------------- */
+.hydrograph__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-2);
+  margin-bottom: var(--s-3);
+}
+.hydrograph__stats--wide { grid-template-columns: repeat(4, 1fr); }
+
+.hydrograph__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: var(--s-2) var(--s-3);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+
+.hydrograph__stat-label {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.hydrograph__stat-value {
+  font-size: var(--t-section);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.hydrograph__stat-value.is-ok { color: var(--ok); }
+.hydrograph__stat-value.is-danger { color: var(--danger); }
+
+/* --- Plot --------------------------------------------------------------- */
+.hydrograph__plot { position: relative; }
+
+.hydrograph__svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.hydrograph__tick {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--text-muted);
+}
+
+.hydrograph__rain { fill: rgba(0, 66, 166, 0.22); }
+
+.hydrograph__inflow-area { fill: rgba(194, 38, 27, 0.10); }
+.hydrograph__inflow-line { fill: none; stroke: var(--danger); stroke-width: 2.2; stroke-linejoin: round; }
+
+.hydrograph__outflow-area { fill: rgba(21, 128, 61, 0.12); }
+.hydrograph__outflow-line {
+  fill: none;
+  stroke: var(--ok);
+  stroke-width: 2.2;
+  stroke-dasharray: 5 3;
+  stroke-linejoin: round;
+}
+
+.hydrograph__dot { stroke: var(--surface); stroke-width: 2; }
+.hydrograph__dot--inflow { fill: var(--danger); }
+.hydrograph__dot--outflow { fill: var(--ok); }
+
+/* --- Hover readout ------------------------------------------------------ */
+.hydrograph__tooltip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 148px;
+  padding: var(--s-2) var(--s-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-rail);
+  pointer-events: none;
+}
+
+.hydrograph__tooltip-hour {
+  font-size: var(--t-caption);
+  font-weight: 600;
+  color: var(--text);
+  padding-bottom: 3px;
+  margin-bottom: 3px;
+  border-bottom: 1px solid var(--border);
+}
+
+.hydrograph__tooltip dl { display: grid; gap: 1px; }
+.hydrograph__tooltip dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+.hydrograph__tooltip dt { font-size: var(--t-label); color: var(--text-muted); }
+.hydrograph__tooltip dd { margin: 0; font-size: var(--t-label); font-weight: 600; color: var(--text); }
+.hydrograph__tooltip dd.is-danger { color: var(--danger); }
+.hydrograph__tooltip dd.is-ok { color: var(--ok); }
+
+/* --- Legend ------------------------------------------------------------- */
+/* A grid, not a flex row: in the rail these wrap to one per line instead of
+   collapsing into the unreadable stack of fragments they were. */
+.hydrograph__legend {
+  display: grid;
+  gap: var(--s-1);
+  margin-top: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+}
+
+.hydrograph__legend span {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-caption);
+  color: var(--text-secondary);
+}
+
+.swatch { width: 12px; height: 3px; flex: none; border-radius: 2px; }
+.swatch--rain { height: 9px; width: 9px; background: rgba(0, 66, 166, 0.35); }
+.swatch--inflow { background: var(--danger); }
+.swatch--outflow { background: var(--ok); }
+
+/* --- Expanded modal ----------------------------------------------------- */
+.hydrograph-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-5);
+  background: rgba(7, 23, 63, 0.42);
+  backdrop-filter: blur(3px);
+}
+
+.hydrograph-modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 900px;
+  max-height: 88vh;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-modal);
+}
+
+.hydrograph-modal__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--border);
+}
+.hydrograph-modal__head h3 { font-size: var(--t-heading); font-weight: 700; }
+
+.hydrograph-modal__close {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.hydrograph-modal__close:hover { background: var(--surface-hover); color: var(--text); }
+
+.hydrograph-modal__body {
+  flex: 1;
+  min-height: 0;
+  padding: var(--s-4) var(--s-5) var(--s-5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.hydrograph-modal .hydrograph__legend {
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: var(--s-5);
+}
+
+/* --- Tabulated series (expanded only) ----------------------------------- */
+.hydrograph__table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--s-5);
+  font-size: var(--t-secondary);
+}
+.hydrograph__table th,
+.hydrograph__table td {
+  padding: var(--s-2) var(--s-3);
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+}
+.hydrograph__table th:first-child,
+.hydrograph__table td:first-child { text-align: left; }
+.hydrograph__table th {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--surface-sunken);
+  white-space: nowrap;
+}
+.hydrograph__table tbody tr:hover,
+.hydrograph__table tbody tr.is-active { background: var(--accent-quiet); }
+.hydrograph__table .is-ok { color: var(--ok); font-weight: 600; }
+
+@media (max-width: 900px) {
+  .hydrograph-modal__backdrop { padding: 0; }
+  .hydrograph-modal { height: 100%; max-height: 100vh; border: 0; border-radius: 0; }
+  .hydrograph__stats--wide { grid-template-columns: 1fr 1fr; }
+  .hydrograph-modal .hydrograph__legend { grid-template-columns: 1fr; gap: var(--s-1); }
+}
