@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+venv/
+env/
+ENV/
+service-account-key.json
+*.log
+.DS_Store
+.vscode/
+pyrightconfig.json
+
+.env
+.venv/
+__pycache__/

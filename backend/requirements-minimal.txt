@@ -1,0 +1,8 @@
+# Everything the demo actually needs. earthengine-api, numpy and pandas from
+# requirements.txt are only used when Earth Engine is authenticated, and the
+# backend falls back to calibrated baselines without them.
+flask>=2.3.3
+flask-cors>=4.0.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+twilio>=9.0.0
