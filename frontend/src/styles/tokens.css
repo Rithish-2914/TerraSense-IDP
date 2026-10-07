@@ -1,0 +1,96 @@
+/* ------------------------------------------------------------------
+   TerraSense design tokens - light surface, NASA-derived palette.
+   Every visual value in the app should trace back to this file.
+------------------------------------------------------------------ */
+:root {
+  /* Surfaces, lightest to most recessed */
+  --surface: #ffffff;
+  --surface-sunken: #f7f9fc;
+  --surface-hover: #f1f5f9;
+  --bg: #eef2f7;
+
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  /* Text */
+  --text: #07173f; /* NASA navy, doubles as the brand colour */
+  --text-secondary: #475569;
+  --text-muted: #7a879b;
+  --text-inverse: #ffffff;
+
+  /* One accent: primary actions, active state, current selection */
+  --accent: #0042a6;
+  --accent-hover: #00337f;
+  --accent-quiet: rgba(0, 66, 166, 0.07);
+  --accent-border: rgba(0, 66, 166, 0.28);
+
+  /* Semantic - meaning only, never decoration */
+  --ok: #15803d;
+  --ok-quiet: #ecfdf3;
+  --warn: #b45309;
+  --warn-quiet: #fef6e7;
+  --danger: #c2261b;
+  --danger-quiet: #fdedeb;
+
+  /* Hazard ramp - map tiers and legend only, matches the API payload */
+  --hazard-low: #eab308;
+  --hazard-mid: #f97316;
+  --hazard-high: #ef4444;
+
+  /* Type */
+  --font-sans:
+    "Overpass", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Overpass Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --t-display: 26px;
+  --t-heading: 19px;
+  --t-section: 15px;
+  --t-title: 13.5px;
+  --t-body: 13px;
+  --t-secondary: 12px;
+  --t-caption: 11px;
+  --t-label: 10.5px;
+
+  --lh-tight: 1.2;
+  --lh-snug: 1.4;
+  --lh-body: 1.55;
+
+  /* Spacing */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-7: 32px;
+  --s-8: 40px;
+  --s-9: 48px;
+  --s-10: 64px;
+
+  /* Radius */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-full: 999px;
+
+  /* Elevation - only where something genuinely floats over the map */
+  --shadow-rail:
+    0 1px 2px rgba(7, 23, 63, 0.06), 0 8px 24px rgba(7, 23, 63, 0.1);
+  --shadow-modal: 0 24px 64px rgba(7, 23, 63, 0.22);
+  --shadow-chip: 0 1px 3px rgba(7, 23, 63, 0.1);
+
+  /* Motion */
+  --dur-fast: 90ms;
+  --dur-base: 160ms;
+  --dur-slow: 280ms;
+  --ease: cubic-bezier(0.32, 0.72, 0.32, 1);
+
+  /* Layering */
+  --z-map-chrome: 900;
+  --z-rail: 1000;
+  --z-modal: 1200;
+  --z-toast: 1400;
+
+  /* The docked control rail */
+  --w-rail: 468px;
+}

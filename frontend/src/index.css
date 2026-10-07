@@ -1,0 +1,721 @@
+@import "./styles/tokens.css";
+
+/* ------------------------------------------------------------------
+   Base + primitives shared across the app.
+   Component-specific rules live in their own CSS files.
+------------------------------------------------------------------ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* Numbers line up in columns and never reflow as they tick. */
+.num,
+.metric-value,
+.status-value,
+.detail-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* --- Layout ---------------------------------------------------------- */
+.app {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The map ends where the rail begins - it is not drawn underneath it. */
+.map-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transition: right var(--dur-slow) var(--ease);
+}
+.app--rail-open .map-container {
+  right: var(--w-rail);
+}
+
+/* --- Section heading -------------------------------------------------- */
+.section {
+  margin-bottom: var(--s-6);
+}
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h3 {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--s-3);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--border);
+}
+
+/* --- Buttons ---------------------------------------------------------- */
+.btn,
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  width: 100%;
+  padding: 9px 16px;
+  font-family: inherit;
+  font-size: var(--t-body);
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--text-inverse);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn-secondary,
+.btn {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.btn-secondary:hover:not(:disabled),
+.btn:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.btn:disabled,
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- Scenario selector ------------------------------------------------ */
+.scenario-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: var(--s-2);
+  margin-bottom: var(--s-3);
+}
+
+.scenario-btn {
+  padding: 7px 10px;
+  font-family: inherit;
+  font-size: var(--t-secondary);
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.scenario-btn:hover:not(:disabled) {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.scenario-btn.active {
+  background: var(--accent-quiet);
+  border-color: var(--accent-border);
+  color: var(--accent);
+  font-weight: 600;
+}
+.scenario-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- Metrics ---------------------------------------------------------- */
+.metrics-card {
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+  margin-bottom: var(--s-3);
+}
+
+.metric-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) 0;
+  border-bottom: 1px solid var(--border);
+}
+.metric-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.metric-item:first-child {
+  padding-top: 0;
+}
+
+.metric-label {
+  font-size: var(--t-secondary);
+  color: var(--text-secondary);
+}
+.metric-value {
+  font-size: var(--t-title);
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* --- Intervention cards ----------------------------------------------- */
+.intervention-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+  margin-bottom: var(--s-2);
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+.intervention-card:hover {
+  border-color: var(--border-strong);
+}
+
+.intervention-title {
+  font-size: var(--t-title);
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--s-1);
+}
+.intervention-desc {
+  font-size: var(--t-secondary);
+  color: var(--text-secondary);
+  line-height: var(--lh-snug);
+  margin-bottom: var(--s-2);
+}
+.intervention-details {
+  font-size: var(--t-caption);
+  color: var(--text-muted);
+  line-height: var(--lh-snug);
+}
+.intervention-details > div {
+  margin-bottom: 2px;
+}
+
+/* --- Loading ---------------------------------------------------------- */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-5);
+  font-size: var(--t-secondary);
+  color: var(--text-muted);
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: var(--r-full);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes slideIn {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* --- Leaflet ---------------------------------------------------------- */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  font-family: var(--font-sans);
+  background: var(--bg);
+}
+
+.leaflet-control-attribution {
+  font-size: 10px !important;
+  color: var(--text-muted) !important;
+  background: rgba(255, 255, 255, 0.86) !important;
+}
+
+.leaflet-bar a {
+  color: var(--text) !important;
+}
+.leaflet-container a {
+  text-decoration: none;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-rail);
+}
+.leaflet-popup-content {
+  font-size: var(--t-secondary);
+  margin: var(--s-3) var(--s-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* --- System status bar ------------------------------------------------ */
+.status-bar {
+  position: absolute;
+  top: var(--s-3);
+  left: var(--s-3);
+  z-index: var(--z-map-chrome);
+  width: 268px;
+  padding: var(--s-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-rail);
+}
+
+.status-bar__identity {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.status-bar__name {
+  font-size: var(--t-section);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-tight);
+  color: var(--text);
+}
+
+.status-bar__tagline {
+  font-size: var(--t-caption);
+  color: var(--text-muted);
+  line-height: var(--lh-snug);
+}
+
+.status-bar__services {
+  display: grid;
+  gap: var(--s-2);
+  padding: var(--s-3) 0;
+}
+
+.status-bar__service {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+.status-bar__service dt {
+  font-size: var(--t-secondary);
+  color: var(--text-secondary);
+}
+.status-bar__service dd {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin: 0;
+  font-size: var(--t-secondary);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--r-full);
+  background: var(--text-muted);
+  flex: none;
+}
+.dot.is-ok {
+  background: var(--ok);
+}
+.dot.is-warn {
+  background: var(--warn);
+}
+.dot.is-danger {
+  background: var(--danger);
+}
+
+.status-bar__footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+}
+
+.status-bar__label {
+  font-size: var(--t-secondary);
+  color: var(--text-secondary);
+  flex: none;
+}
+
+.status-bar__area {
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+  /* Ward names are long; wrap rather than truncate to a useless stub. */
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+  .status-bar {
+    width: auto;
+    right: var(--s-3);
+    padding: var(--s-3);
+  }
+  .status-bar__services {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-3);
+  }
+}
+
+/* --- Map toolbar ------------------------------------------------------ */
+/* A transparent strip spanning the map to the *right of the status card*;
+   the bar inside it centres in that strip. Because the strip starts where
+   the card ends, the toolbar can never overlap it at any viewport width,
+   and it still reads as centred rather than shoved into a corner. */
+.map-toolbar {
+  position: absolute;
+  top: var(--s-3);
+  left: 292px;
+  right: var(--s-3);
+  z-index: var(--z-map-chrome);
+  display: flex;
+  justify-content: center;
+  /* Clicks land on the bar, not on the empty strip around it. */
+  pointer-events: none;
+}
+
+.map-toolbar__bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s-2);
+  max-width: 100%;
+  padding: var(--s-1);
+  pointer-events: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-rail);
+}
+
+.map-toolbar__group {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--surface-sunken);
+  border-radius: var(--r-md);
+}
+.map-toolbar__group--plain {
+  background: transparent;
+  padding: 0;
+  gap: var(--s-1);
+}
+
+.map-toolbar button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 6px 11px;
+  font-family: inherit;
+  font-size: var(--t-caption);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+/* Segmented basemap picker - one selection, marked by the accent. */
+.map-toolbar__seg:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+.map-toolbar__seg.is-active {
+  color: var(--accent);
+  background: var(--surface);
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-chip);
+}
+
+/* Independent on/off toggles - a dot carries the state, not a glow. */
+.map-toolbar__toggle {
+  background: var(--surface);
+  border-color: var(--border-strong);
+}
+.map-toolbar__toggle:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.map-toolbar__toggle.is-on {
+  color: var(--accent);
+  background: var(--accent-quiet);
+  border-color: var(--accent-border);
+}
+
+.map-toolbar__dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: var(--r-full);
+  background: var(--border-strong);
+  transition: background var(--dur-fast) var(--ease);
+}
+.map-toolbar__toggle.is-on .map-toolbar__dot {
+  background: var(--accent);
+}
+
+/* Routing is a network call - say so rather than leaving the map blank. */
+.map-toolbar__dot.is-busy {
+  animation: dotPulse 1.1s var(--ease) infinite;
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.65);
+  }
+}
+
+.map-toolbar__note {
+  font-size: var(--t-label);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.map-toolbar__toggle.is-on .map-toolbar__note {
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+/* --- Leaflet controls -------------------------------------------------- */
+/* Zoom is docked bottom-right (see MapView), clear of the status card, the
+   legend and the hazard surface. It only has to clear the attribution. */
+.leaflet-bottom.leaflet-right {
+  margin-bottom: 18px;
+}
+
+.leaflet-bar {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-md) !important;
+  box-shadow: var(--shadow-chip) !important;
+  overflow: hidden;
+}
+.leaflet-bar a {
+  width: 28px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+  font-size: 16px;
+  color: var(--text-secondary) !important;
+  background: var(--surface);
+  border-bottom-color: var(--border) !important;
+}
+.leaflet-bar a:hover {
+  background: var(--surface-hover);
+  color: var(--text) !important;
+}
+
+@media (max-width: 900px) {
+  /* The sheet takes the bottom of the screen, so the map gives up height,
+     not width. */
+  .app--rail-open .map-container {
+    right: 0;
+    bottom: 56vh;
+  }
+
+  .map-toolbar {
+    top: auto;
+    bottom: var(--s-2);
+    left: var(--s-2);
+    right: var(--s-2);
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+  .map-toolbar__bar {
+    flex-wrap: nowrap;
+    margin: 0 auto;
+  }
+
+  .status-bar {
+    width: auto;
+    right: var(--s-3);
+  }
+}
+
+/* --- Callout ---------------------------------------------------------- */
+/* A sub-card inside the rail. Not a .section, so it keeps its own heading
+   treatment rather than the tracked uppercase one. */
+.callout {
+  padding: var(--s-3);
+  margin-bottom: var(--s-6);
+  background: var(--accent-quiet);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--r-md);
+}
+
+.callout__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-bottom: var(--s-2);
+}
+
+.callout h3 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: var(--t-title);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text);
+}
+
+.btn-inline {
+  flex: none;
+  padding: 4px 10px;
+  font-family: inherit;
+  font-size: var(--t-caption);
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--surface);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+.btn-inline:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+.btn-inline:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.callout--neutral {
+  background: var(--surface-sunken);
+  border-color: var(--border);
+}
+
+.tag {
+  flex: none;
+  padding: 2px 8px;
+  font-size: var(--t-label);
+  font-weight: 600;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  white-space: nowrap;
+}
+
+/* --- Hazard heat surface ---------------------------------------------- */
+/* The eight depth bands are drawn as overlapping translucent polygons into
+   their own canvas pane. Blurring that pane dissolves the band edges into a
+   continuous density surface - the polygons stay exact for hit-testing and
+   the split-view cut, only the paint is softened. Nothing else on the map is
+   affected, because nothing else lives in this pane. */
+.leaflet-hazard-pane {
+  filter: blur(11px) saturate(1.15);
+  /* Keeps the blur on the compositor rather than re-rasterising each frame. */
+  will-change: filter;
+}
+
+/* The geometric style wants its edges back. */
+.leaflet-hazard-pane.is-crisp {
+  filter: none;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Motion is already stopped in JS; soften the blur too so the surface is
+     easier to read when it isn't evolving. */
+  .leaflet-hazard-pane {
+    filter: blur(8px) saturate(1.15);
+  }
+}
