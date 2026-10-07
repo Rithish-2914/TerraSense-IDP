@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name":"chennai-flood-zone", "city":"Chennai", "state":"Tamil Nadu"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates":[[[80.25,13.05],[80.30,13.05],[80.30,13.10],[80.25,13.10],[80.25,13.05]]]
+      }
+    }
+  ]
+}

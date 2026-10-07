@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name":"kolkata-drainage-basin", "city":"Kolkata", "state":"West Bengal"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates":[[[88.30,22.50],[88.40,22.50],[88.40,22.60],[88.30,22.60],[88.30,22.50]]]
+      }
+    }
+  ]
+}

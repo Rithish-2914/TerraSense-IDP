@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name":"delhi-yamuna-floodplain", "city":"New Delhi", "state":"Delhi"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates":[[[77.20,28.55],[77.25,28.55],[77.25,28.60],[77.20,28.60],[77.20,28.55]]]
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name":"pilot-trichy-ward"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates":[[[80.27,13.07],[80.28,13.07],[80.28,13.08],[80.27,13.08],[80.27,13.07]]]
+      }
+    }
+  ]
+}

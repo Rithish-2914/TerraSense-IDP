@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name":"bangalore-lake-catchment", "city":"Bangalore", "state":"Karnataka"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates":[[[77.55,12.95],[77.65,12.95],[77.65,13.05],[77.55,13.05],[77.55,12.95]]]
+      }
+    }
+  ]
+}

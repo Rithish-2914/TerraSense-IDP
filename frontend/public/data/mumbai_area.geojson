@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"name":"mumbai-monsoon-zone", "city":"Mumbai", "state":"Maharashtra"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates":[[[72.80,19.05],[72.85,19.05],[72.85,19.10],[72.80,19.10],[72.80,19.05]]]
+      }
+    }
+  ]
+}
