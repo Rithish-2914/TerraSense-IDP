@@ -95,7 +95,7 @@ const IntroPopup = ({ onComplete }) => {
         </div>
         
         <div className="intro-footer">
-          <span className="intro-badge">WEHACK 2026</span>
+          <span className="intro-badge">Innovative Design Project (IDP)</span>
         </div>
       </div>
     </div>

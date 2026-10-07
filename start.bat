@@ -1,9 +1,9 @@
 @echo off
-title TerraSense - Climate-Adaptive Urban Digital Twin (WEHACK 2026)
+title TerraSense - Climate-Adaptive Urban Digital Twin (Innovative Design Project)
 echo.
 echo =================================================================
 echo  🚀 TerraSense - Climate-Adaptive Urban Digital Twin
-echo  🛰️ WEHACK 2026 - NASA Earth Engine & AI Data Pipeline
+echo  🛰️ Innovative Design Project (IDP) - NASA Earth Engine & AI Data Pipeline
 echo =================================================================
 echo.
 

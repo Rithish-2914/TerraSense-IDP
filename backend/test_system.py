@@ -110,7 +110,7 @@ def test_simulation():
 def main():
     print("=" * 60)
     print("🌍 TerraSense Digital Twin - Automated Verification Suite")
-    print("   WEHACK 2026 • graVITas'26 | Civil Hydrology & Climate Engine")
+    print("   Innovative Design Project (IDP) | Civil Hydrology & Climate Engine")
     print("=" * 60)
     
     t0 = time.time()

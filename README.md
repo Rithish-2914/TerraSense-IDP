@@ -479,7 +479,7 @@ python backend/test_system.py
 ```
 ============================================================
 🌍 TerraSense Digital Twin - Automated Verification Suite
-   WEHACK 2026 • graVITas'26 | Civil Hydrology & Climate Engine
+   Innovative Design Project (IDP) | Civil Hydrology & Climate Engine
 ============================================================
 🔬 Testing Core USDA SCS-CN Hydrological Equations (NEH-4 Standard)...
    Potential Retention S: 71.64 mm
@@ -564,5 +564,5 @@ python backend/test_system.py
 ## 👥 15. Team & Acknowledgments
 
 - **Project:** TerraSense — Climate-Adaptive Urban Digital Twin
-- **Developed for:** WEHACK 2026 • graVITas'26 (VIT & IEEE WIE)
+- **Course / Initiative:** Innovative Design Project (IDP)
 - **Frameworks:** USDA NRCS NEH-4, CPWD DSR 2023, NASA Earth Science Data Systems (ESDS)

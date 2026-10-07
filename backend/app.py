@@ -335,11 +335,8 @@ def index():
     return jsonify({
         "service": "TerraSense - Climate-Adaptive Urban Digital Twin Backend API",
         "status": "online",
-        "event": "WEHACK 2026 • graVITas'26",
-        "tracks": [
-            "Track 01: Sustainable Energy & Resource Innovation",
-            "Track 03: Intelligent Digital Solutions (Digital Twins & XAI)"
-        ]
+        "project": "Innovative Design Project (IDP)",
+        "domain": "Hydro-Spatial Digital Twin & Climate Adaptation Engine"
     })
 
 @app.route('/api/health', methods=['GET'])

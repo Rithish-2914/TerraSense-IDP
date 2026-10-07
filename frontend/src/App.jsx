@@ -785,7 +785,7 @@ function App() {
           <div>
             <h1 className="status-bar__name">TerraSense</h1>
             <p className="status-bar__tagline">
-              Climate digital twin&nbsp;· WEHACK 2026
+              Climate digital twin&nbsp;· Innovative Design Project
             </p>
           </div>
         </div>
