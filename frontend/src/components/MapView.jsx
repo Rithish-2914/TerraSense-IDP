@@ -348,6 +348,7 @@ const MapView = ({
   simulationData,
   uploadedFileName,
   mitigationReductionPct = 0,
+  panelVisible = true,
 }) => {
   const [activeLayer, setActiveLayer] = useState("satellite"); // 'satellite' | 'topography' | 'streets'
   const [showEvacuationRoutes, setShowEvacuationRoutes] = useState(false);
@@ -361,6 +362,19 @@ const MapView = ({
 
   const handleMapReady = useCallback((map) => setMapInstance(map), []);
   const handleViewChange = useCallback(() => setViewTick((n) => n + 1), []);
+
+  useEffect(() => {
+    if (!mapInstance) return;
+    const timer = setTimeout(() => {
+      mapInstance.invalidateSize();
+    }, 200);
+    const handleResize = () => mapInstance.invalidateSize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [mapInstance, panelVisible]);
 
   // The hazard bands render into their own canvas pane. That pane is blurred
   // in CSS for the heat style, which is what turns the overlapping translucent

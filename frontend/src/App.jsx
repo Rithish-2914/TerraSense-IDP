@@ -835,6 +835,7 @@ function App() {
         simulationData={activeSimulationData}
         uploadedFileName={uploadedFileName}
         mitigationReductionPct={mitigationReductionPct}
+        panelVisible={panelVisible}
       />
 
       {showIntroPopup && <IntroPopup onComplete={handleIntroComplete} />}
