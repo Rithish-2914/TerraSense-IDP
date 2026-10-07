@@ -1,0 +1,210 @@
+/* ------------------------------------------------------------------
+   National benchmark matrix - a comparison table, so it is built as
+   one: hairline rules, tabular figures, and colour reserved for the
+   two columns where severity actually carries meaning.
+------------------------------------------------------------------ */
+
+.benchmark-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-5);
+  background: rgba(7, 23, 63, 0.42);
+  backdrop-filter: blur(3px);
+}
+
+.benchmark-modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1000px;
+  max-height: 88vh;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-modal);
+}
+
+.benchmark-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.benchmark-eyebrow {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.benchmark-header h2 {
+  margin-top: 3px;
+  font-size: var(--t-heading);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: var(--lh-tight);
+  color: var(--text);
+}
+
+.benchmark-close {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.benchmark-close:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.benchmark-body {
+  flex: 1;
+  min-height: 0;
+  padding: var(--s-4) var(--s-5) var(--s-5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.benchmark-intro {
+  margin-bottom: var(--s-4);
+  font-size: var(--t-secondary);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+}
+.benchmark-intro strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.benchmark-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.benchmark-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-secondary);
+}
+
+.benchmark-table th,
+.benchmark-table td {
+  padding: var(--s-3);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.benchmark-table th {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--surface-sunken);
+}
+
+.benchmark-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.benchmark-table tbody tr:hover {
+  background: var(--surface-sunken);
+}
+
+/* The ward currently loaded in the twin. */
+.benchmark-table tbody tr.is-active {
+  background: var(--accent-quiet);
+}
+.benchmark-table tbody tr.is-active:hover {
+  background: var(--accent-quiet);
+}
+
+.benchmark-city {
+  font-weight: 600;
+  color: var(--text);
+}
+.benchmark-city__meta {
+  margin-top: 1px;
+  font-size: var(--t-caption);
+  color: var(--text-muted);
+}
+
+.benchmark-muted {
+  color: var(--text-secondary);
+}
+.benchmark-table .is-danger {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.benchmark-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: var(--t-label);
+  font-weight: 600;
+  color: var(--warn);
+  background: var(--warn-quiet);
+  border-radius: var(--r-sm);
+}
+.benchmark-pill.is-critical {
+  color: var(--danger);
+  background: var(--danger-quiet);
+}
+
+.benchmark-action {
+  text-align: right;
+}
+.benchmark-action .btn-inline {
+  width: auto;
+}
+
+.benchmark-current {
+  display: inline-block;
+  padding: 2px 9px;
+  font-size: var(--t-label);
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--surface);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--r-sm);
+}
+
+@media (max-width: 900px) {
+  .benchmark-backdrop {
+    padding: 0;
+  }
+  .benchmark-modal {
+    height: 100%;
+    max-height: 100vh;
+    border: 0;
+    border-radius: 0;
+  }
+  .benchmark-header,
+  .benchmark-body {
+    padding-left: var(--s-4);
+    padding-right: var(--s-4);
+  }
+}

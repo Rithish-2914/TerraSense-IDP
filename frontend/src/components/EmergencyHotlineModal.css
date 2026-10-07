@@ -1,0 +1,712 @@
+/* ------------------------------------------------------------------
+   Disaster control room.
+
+   A full-screen console, but built from the same parts as the rest of
+   the app: white surfaces, hairline borders, NASA navy text, and the
+   semantic ramp used only where severity actually means something.
+------------------------------------------------------------------ */
+
+.hotline-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-5);
+  background: rgba(7, 23, 63, 0.42);
+  backdrop-filter: blur(3px);
+}
+
+.hotline-modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1080px;
+  max-height: 88vh;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-modal);
+}
+
+/* --- Header ----------------------------------------------------------- */
+.hotline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.hotline-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-width: 0;
+}
+
+/* A live-line indicator, not an emblem: the pulse says the line is open. */
+.emblem-badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  background: var(--danger-quiet);
+  border-radius: var(--r-md);
+}
+.emblem-badge::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--danger);
+  border-radius: var(--r-full);
+  animation: hotlinePulse 2s var(--ease) infinite;
+}
+
+@keyframes hotlinePulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+
+.hotline-header h2 {
+  font-size: var(--t-heading);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: var(--lh-tight);
+  color: var(--text);
+}
+
+.hotline-sub {
+  margin-top: 2px;
+  font-size: var(--t-caption);
+  color: var(--text-muted);
+}
+.hotline-sub strong {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.hotline-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex: none;
+}
+
+.simulate-incoming-btn {
+  padding: 8px 14px;
+  font-family: inherit;
+  font-size: var(--t-secondary);
+  font-weight: 600;
+  color: var(--text-inverse);
+  background: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease);
+}
+.simulate-incoming-btn:hover:not(:disabled) {
+  background: #9e1e15;
+}
+.simulate-incoming-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Destructive, so it stays quiet until it is actually needed and asks once
+   before wiping the board. */
+.hotline-clear-btn {
+  padding: 8px 13px;
+  font-family: inherit;
+  font-size: var(--t-secondary);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.hotline-clear-btn:hover {
+  color: var(--danger);
+  background: var(--danger-quiet);
+  border-color: rgba(194, 38, 27, 0.3);
+}
+.hotline-clear-btn.is-confirming {
+  color: var(--text-inverse);
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+.hotline-close-btn {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  padding: 0;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.hotline-close-btn:hover {
+  background: var(--danger-quiet);
+  color: var(--danger);
+}
+
+/* --- Counters --------------------------------------------------------- */
+.hotline-counters {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-5);
+  background: var(--surface-sunken);
+  border-bottom: 1px solid var(--border);
+}
+
+.counter-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: var(--s-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--border-strong);
+  border-radius: var(--r-md);
+}
+.counter-card.red {
+  border-left-color: var(--danger);
+}
+.counter-card.orange {
+  border-left-color: var(--warn);
+}
+.counter-card.green {
+  border-left-color: var(--ok);
+}
+.counter-card.blue {
+  border-left-color: var(--accent);
+}
+
+.counter-title {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.counter-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-tight);
+  color: var(--text);
+}
+.counter-card.red .counter-num {
+  color: var(--danger);
+}
+.counter-card.orange .counter-num {
+  color: var(--warn);
+}
+.counter-card.green .counter-num {
+  color: var(--ok);
+}
+
+.counter-desc {
+  font-size: var(--t-caption);
+  color: var(--text-muted);
+}
+
+/* --- Toolbar ---------------------------------------------------------- */
+.hotline-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-3) var(--s-5);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-filters {
+  display: flex;
+  gap: var(--s-1);
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: var(--t-secondary);
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.tab-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+/* The active filter is tinted in its own severity colour - the fill states
+   which slice of the queue you are looking at. */
+.tab-btn.active {
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-quiet);
+  border-color: var(--accent-border);
+}
+.tab-btn.red.active {
+  color: var(--danger);
+  background: var(--danger-quiet);
+  border-color: rgba(194, 38, 27, 0.3);
+}
+.tab-btn.orange.active {
+  color: var(--warn);
+  background: var(--warn-quiet);
+  border-color: rgba(180, 83, 9, 0.3);
+}
+.tab-btn.green.active {
+  color: var(--ok);
+  background: var(--ok-quiet);
+  border-color: rgba(21, 128, 61, 0.3);
+}
+
+.search-wrap {
+  flex: none;
+}
+
+.search-wrap input {
+  width: 280px;
+  padding: 7px 12px;
+  font-family: inherit;
+  font-size: var(--t-secondary);
+  color: var(--text);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  outline: none;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+.search-wrap input::placeholder {
+  color: var(--text-muted);
+}
+.search-wrap input:focus {
+  background: var(--surface);
+  border-color: var(--accent-border);
+}
+
+/* --- Record list ------------------------------------------------------ */
+.hotline-records-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  flex: 1;
+  min-height: 0;
+  padding: var(--s-4) var(--s-5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--surface-sunken);
+}
+
+.hotline-records-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+.hotline-records-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.hotline-records-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border: 3px solid var(--surface-sunken);
+  border-radius: var(--r-full);
+}
+
+.no-records {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-9) var(--s-5);
+  font-size: var(--t-secondary);
+  color: var(--text-muted);
+  text-align: center;
+}
+.no-records strong {
+  font-size: var(--t-title);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* --- Record card ------------------------------------------------------ */
+.hotline-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: var(--r-md);
+  animation: slideIn var(--dur-base) var(--ease) both;
+}
+.hotline-card.severity-critical {
+  border-left-color: var(--danger);
+}
+.hotline-card.severity-high {
+  border-left-color: var(--warn);
+}
+.hotline-card.severity-medium {
+  border-left-color: var(--hazard-low);
+}
+.hotline-card.severity-resolved {
+  border-left-color: var(--ok);
+}
+
+.hotline-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+
+.caller-col {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.call-ref {
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+
+.caller-title {
+  font-size: var(--t-title);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.phone-tag {
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  color: var(--text-secondary);
+}
+
+.time-tag {
+  font-size: var(--t-caption);
+  color: var(--text-muted);
+}
+
+.status-badges {
+  display: flex;
+  gap: var(--s-2);
+  flex: none;
+}
+
+.pill-badge {
+  padding: 2px 8px;
+  font-size: var(--t-label);
+  font-weight: 600;
+  border-radius: var(--r-sm);
+}
+.pill-badge.critical {
+  color: var(--danger);
+  background: var(--danger-quiet);
+}
+.pill-badge.high {
+  color: var(--warn);
+  background: var(--warn-quiet);
+}
+.pill-badge.medium {
+  color: #854d0e;
+  background: #fefce8;
+}
+.pill-badge.resolved {
+  color: var(--ok);
+  background: var(--ok-quiet);
+}
+
+.dispatch-pill {
+  padding: 2px 8px;
+  font-size: var(--t-label);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+.dispatch-pill.dispatched {
+  color: var(--accent);
+  background: var(--accent-quiet);
+  border-color: var(--accent-border);
+}
+.dispatch-pill.resolved {
+  color: var(--ok);
+  background: var(--ok-quiet);
+  border-color: transparent;
+}
+
+/* --- Card detail grid -------------------------------------------------- */
+.hotline-card-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: var(--s-4);
+  padding: var(--s-3);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.grid-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.row-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  font-size: var(--t-secondary);
+}
+
+.row-label {
+  flex: none;
+  min-width: 122px;
+  color: var(--text-muted);
+}
+.row-val {
+  color: var(--text);
+}
+.row-val.depth {
+  font-weight: 600;
+  color: var(--danger);
+}
+.row-val.need {
+  color: var(--text-secondary);
+}
+
+.recording-box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+
+.recording-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+}
+
+.rec-title {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.play-rec-btn {
+  flex: none;
+  padding: 3px 9px;
+  font-family: inherit;
+  font-size: var(--t-label);
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--surface);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+.play-rec-btn:hover {
+  background: var(--accent-quiet);
+}
+.play-rec-btn.playing {
+  color: var(--text-inverse);
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+.rec-text {
+  font-size: var(--t-caption);
+  font-style: italic;
+  line-height: var(--lh-snug);
+  color: var(--text-secondary);
+}
+
+.dispatched-unit-tag {
+  padding: var(--s-2) var(--s-3);
+  font-size: var(--t-caption);
+  color: var(--accent);
+  background: var(--accent-quiet);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--r-sm);
+}
+.dispatched-unit-tag strong {
+  font-weight: 600;
+}
+
+/* --- Card footer ------------------------------------------------------- */
+.hotline-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+}
+
+.action-buttons-group {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+
+/* Dispatch options are peers - one neutral button shape, no colour race. */
+.dispatch-action-btn {
+  padding: 5px 11px;
+  font-family: inherit;
+  font-size: var(--t-caption);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.dispatch-action-btn:hover {
+  color: var(--accent);
+  background: var(--accent-quiet);
+  border-color: var(--accent-border);
+}
+
+/* Except the call - placing a real phone call is the one irreversible act. */
+.dispatch-action-btn.call {
+  color: var(--danger);
+  border-color: rgba(194, 38, 27, 0.3);
+}
+.dispatch-action-btn.call:hover {
+  color: var(--text-inverse);
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
+.resolve-group {
+  flex: none;
+}
+
+.resolve-action-btn {
+  padding: 5px 12px;
+  font-family: inherit;
+  font-size: var(--t-caption);
+  font-weight: 600;
+  color: var(--ok);
+  background: var(--ok-quiet);
+  border: 1px solid rgba(21, 128, 61, 0.28);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.resolve-action-btn:hover {
+  color: var(--text-inverse);
+  background: var(--ok);
+}
+
+.evacuated-label {
+  font-size: var(--t-caption);
+  font-weight: 600;
+  color: var(--ok);
+}
+
+/* --- Narrow screens ---------------------------------------------------- */
+@media (max-width: 900px) {
+  .hotline-backdrop {
+    padding: 0;
+  }
+  .hotline-modal {
+    max-height: 100vh;
+    height: 100%;
+    border-radius: 0;
+    border: 0;
+  }
+  .hotline-counters {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hotline-header,
+  .hotline-toolbar,
+  .hotline-records-scroll {
+    padding-left: var(--s-4);
+    padding-right: var(--s-4);
+  }
+  .hotline-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-wrap input {
+    width: 100%;
+  }
+  .hotline-card-grid {
+    grid-template-columns: 1fr;
+  }
+}

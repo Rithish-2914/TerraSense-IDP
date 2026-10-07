@@ -1,0 +1,200 @@
+/* ------------------------------------------------------------------
+   Live helpline call alerts - top-right of the visible map, below the
+   toolbar. The rail shifts them left when it's open so they stay over
+   the map rather than on top of the controls.
+------------------------------------------------------------------ */
+
+.call-alerts {
+  position: absolute;
+  top: 72px;
+  right: var(--s-3);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  width: 300px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+.app--rail-open .call-alerts {
+  right: calc(var(--w-rail) + var(--s-3));
+}
+
+.call-alerts__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  padding: 0 var(--s-1);
+}
+
+.call-alerts__count {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-inverse);
+  background: var(--danger);
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-chip);
+}
+
+.call-alerts__clear {
+  padding: 2px 8px;
+  font-family: inherit;
+  font-size: var(--t-label);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  box-shadow: var(--shadow-chip);
+}
+.call-alerts__clear:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+/* --- One alert --------------------------------------------------------- */
+.call-alert {
+  padding: var(--s-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--danger);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-rail);
+  animation: callAlertIn var(--dur-slow) var(--ease) both;
+}
+
+@keyframes callAlertIn {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.call-alert__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+}
+
+.call-alert__live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--danger);
+}
+
+.call-alert__pulse {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  background: var(--danger);
+  border-radius: var(--r-full);
+  animation: callPulse 1.4s var(--ease) infinite;
+}
+
+@keyframes callPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+}
+
+.call-alert__dismiss {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  padding: 0;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.call-alert__dismiss:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.call-alert__phone {
+  margin-top: var(--s-2);
+  font-size: var(--t-section);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.call-alert__meta {
+  display: grid;
+  gap: 2px;
+  margin: var(--s-2) 0 var(--s-3);
+}
+.call-alert__meta > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+.call-alert__meta dt {
+  font-size: var(--t-caption);
+  color: var(--text-muted);
+}
+.call-alert__meta dd {
+  margin: 0;
+  font-size: var(--t-caption);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.call-alert__action {
+  width: 100%;
+  padding: 7px 12px;
+  font-family: inherit;
+  font-size: var(--t-secondary);
+  font-weight: 600;
+  color: var(--text-inverse);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+.call-alert__action:hover {
+  background: var(--accent-hover);
+}
+
+@media (max-width: 900px) {
+  /* The status card goes full width on small screens, so start below it,
+     and the sheet owns the bottom - keep the stack short. */
+  .call-alerts,
+  .app--rail-open .call-alerts {
+    top: 132px;
+    right: var(--s-2);
+    left: var(--s-2);
+    width: auto;
+    max-height: 40vh;
+  }
+}

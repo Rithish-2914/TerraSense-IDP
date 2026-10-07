@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TerraSense | Urban Climate & Hydrological Digital Twin Simulation Workbench</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0B132B;
+      --bg-surface: #111D42;
+      --bg-card: #162454;
+      --bg-elevated: #1C2D66;
+      --primary: #2563EB;
+      --primary-hover: #1D4ED8;
+      --accent: #0284C7;
+      --accent-light: #38BDF8;
+      --danger: #DC2626;
+      --danger-light: #EF4444;
+      --warning: #D97706;
+      --success: #059669;
+      --success-light: #10B981;
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+      --border: #2A3B75;
+      --border-subtle: #1E2D5E;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.5;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top App Header */
+    .app-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #FFFFFF;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-subtitle {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--success-light);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success-light);
+    }
+
+    /* Main Container */
+    .app-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* City & Scenario Selector Bar */
+    .toolbar-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .city-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .city-btn:hover {
+      background: var(--bg-elevated);
+      color: #FFFFFF;
+      border-color: var(--accent);
+    }
+
+    .city-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    .action-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: #FFFFFF;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: var(--bg-elevated);
+      border-color: var(--accent-light);
+    }
+
+    .action-btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .action-btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* 2-Column Workbench Grid */
+    .workbench-grid {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
+    }
+
+    @media (max-width: 1080px) {
+      .workbench-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left: Map & GIS Canvas Card */
+    .map-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-surface);
+    }
+
+    .card-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .layer-controls {
+      display: flex;
+      gap: 4px;
+    }
+
+    .layer-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .layer-pill.active {
+      background: var(--bg-elevated);
+      color: var(--accent-light);
+      border-color: var(--accent);
+    }
+
+    .map-canvas-area {
+      height: 480px;
+      background: #060D20;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Realistic GIS Grid */
+    .gis-grid {
+      position: absolute;
+      inset: 0;
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    }
+
+    /* Before / After Slicing Layers */
+    .split-pane-before {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+      z-index: 2;
+    }
+
+    .split-pane-after {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+      z-index: 3;
+    }
+
+    /* Flood Hazard Polygon Layer (Before) */
+    .flood-hazard-polygon {
+      border-radius: 12px;
+      background: rgba(220, 38, 38, 0.55);
+      border: 2px solid #EF4444;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+      transition: all 0.2s ease-out;
+    }
+
+    /* Green Mitigated Sponge Buffer (After) */
+    .green-sponge-polygon {
+      border-radius: 12px;
+      background: rgba(5, 150, 105, 0.45);
+      border: 2px solid #10B981;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+      transition: all 0.2s ease-out;
+    }
+
+    /* Draggable Curtain Slider Bar */
+    .slicer-divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #38BDF8;
+      z-index: 10;
+      cursor: ew-resize;
+      box-shadow: 0 0 8px #38BDF8;
+    }
+
+    .slicer-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 2px solid #38BDF8;
+      color: #38BDF8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: ew-resize;
+      user-select: none;
+    }
+
+    /* Map Markers */
+    .gis-marker {
+      position: absolute;
+      background: var(--bg-surface);
+      border: 1px solid #38BDF8;
+      color: #38BDF8;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      z-index: 6;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    /* Right: Simulation Controls & Parameter Workbench */
+    .controls-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .control-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .control-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #FFFFFF;
+    }
+
+    .control-value {
+      font-family: 'Fira Code', monospace;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--accent-light);
+    }
+
+    .control-hint {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      accent-color: var(--primary);
+      background: var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Intervention Checkbox List */
+    .intervention-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .intervention-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--bg-elevated);
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .intervention-item input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--success-light);
+      cursor: pointer;
+    }
+
+    .intervention-info {
+      flex: 1;
+    }
+
+    .intervention-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #FFFFFF;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .intervention-cost {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'Fira Code', monospace;
+    }
+
+    .intervention-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* Metrics Summary Cards Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .metric-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .metric-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .metric-value {
+      font-family: 'Fira Code', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
+    .metric-subtext {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .metric-highlight-danger {
+      color: var(--danger-light);
+    }
+
+    .metric-highlight-success {
+      color: var(--success-light);
+    }
+
+    /* Hydrograph & Data Tables Row */
+    .data-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .data-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .data-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .data-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #FFFFFF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    canvas {
+      width: 100%;
+      height: 180px;
+      background: var(--bg-card);
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Data Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th {
+      text-align: left;
+      padding: 8px;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    td {
+      padding: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: #E2E8F0;
+    }
+
+    /* Modal for DPR */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-logo">🌐</div>
+      <div>
+        <div class="brand-title">TerraSense Digital Twin</div>
+        <div class="brand-subtitle">Urban Climate & Hydrological Simulation Workbench</div>
+      </div>
+    </div>
+    <div class="header-status">
+      <span class="status-badge">
+        <span class="status-dot"></span>
+        USDA SCS-CN Engine: Online
+      </span>
+      <span class="status-badge" style="background: rgba(56, 189, 248, 0.12); color: var(--accent-light); border-color: rgba(56, 189, 248, 0.3);">
+        NASA Satellite Baselines: Active
+      </span>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <!-- City Selector Toolbar -->
+    <div class="toolbar-card">
+      <div class="toolbar-group">
+        <span class="toolbar-label">Select Ward Boundary:</span>
+        <button class="city-btn active" onclick="setCity('trichy', this)">Trichy (Cauvery Basin)</button>
+        <button class="city-btn" onclick="setCity('mumbai', this)">Mumbai (Coastal Ward)</button>
+        <button class="city-btn" onclick="setCity('chennai', this)">Chennai (Adyar Delta)</button>
+        <button class="city-btn" onclick="setCity('bangalore', this)">Bangalore (Lake Catchment)</button>
+        <button class="city-btn" onclick="setCity('delhi', this)">Delhi (Yamuna Plain)</button>
+        <button class="city-btn" onclick="setCity('kolkata', this)">Kolkata (Wetlands)</button>
+      </div>
+      <div class="toolbar-group">
+        <button class="action-btn" onclick="openDprModal()">📄 Export Municipal DPR (PDF)</button>
+        <a href="http://localhost:5173" target="_blank" class="action-btn action-btn-primary" style="text-decoration: none;">
+          Full React Platform ↗
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Workbench Grid (Left: GIS Map Slicer | Right: Controls) -->
+    <div class="workbench-grid">
+
+      <!-- Map & Slicer Card -->
+      <div class="map-card">
+        <div class="card-header">
+          <div class="card-title">
+            <span>Spatial Simulation Slicer</span>
+            <span id="active-ward-name" style="font-size: 11.5px; color: var(--accent-light); font-weight: 500;">
+              (Trichy Pilot Catchment: 100.0 Ha)
+            </span>
+          </div>
+          <div class="layer-controls">
+            <button class="layer-pill active" onclick="setLayer('standard', this)">Satellite GIS</button>
+            <button class="layer-pill" onclick="setLayer('thermal', this)">MODIS Surface Heat</button>
+            <button class="layer-pill" onclick="setLayer('terrain', this)">SRTM 30m Elevation</button>
+          </div>
+        </div>
+
+        <div class="map-canvas-area" id="map-container">
+          <div class="gis-grid" id="gis-grid"></div>
+
+          <!-- Left Split: Raw Flood Hazard (Before) -->
+          <div class="split-pane-before" id="pane-before">
+            <div class="flood-hazard-polygon" id="flood-poly" style="width: 70%; height: 70%;">
+              <div style="font-size: 13px; font-weight: 700; color: #FFFFFF;" id="hazard-title">
+                Unmitigated Flood Hazard: 58.0 Ha
+              </div>
+              <div style="font-size: 11px; color: #FECACA; margin-top: 3px;" id="hazard-sub">
+                Water Depth: 1.15m • 3,850 Citizens Exposed
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Split: Green Sponge Mitigation (After) -->
+          <div class="split-pane-after" id="pane-after">
+            <div class="green-sponge-polygon" id="sponge-poly" style="width: 30%; height: 30%;">
+              <div style="font-size: 13px; font-weight: 700; color: #FFFFFF;" id="mitigated-title">
+                Mitigated Sponge Catchment: 8.2 Ha
+              </div>
+              <div style="font-size: 11px; color: #A7F3D0; margin-top: 3px;" id="mitigated-sub">
+                Water Depth: 0.22m • -52% Runoff Cut
+              </div>
+            </div>
+          </div>
+
+          <!-- Safe Elevation Shelter Points -->
+          <div class="gis-marker" style="top: 20%; right: 20%;" title="Safe shelter at +94m MSL elevation">
+            🏥 Safe Shelter A (+94m MSL)
+          </div>
+          <div class="gis-marker" style="bottom: 25%; right: 15%;" title="Safe shelter at +89m MSL elevation">
+            🏫 Safe Shelter B (+89m MSL)
+          </div>
+
+          <!-- Draggable Divider -->
+          <div class="slicer-divider" id="slicer-bar" style="left: 50%;">
+            <div class="slicer-handle">◀▶</div>
+          </div>
+        </div>
+
+        <div style="padding: 8px 14px; background: var(--bg-card); display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
+          <span>◀ Drag slider left/right to compare Unmitigated Hazard vs Green Mitigation</span>
+          <span>SRTM Topographic Slopes: 1.2%</span>
+        </div>
+      </div>
+
+      <!-- Controls & Parameter Workbench -->
+      <div class="controls-card">
+        <div class="card-title" style="margin-bottom: -4px;">
+          ⚙️ Hydrological Parameter Controls
+        </div>
+
+        <!-- 1. Precipitation Slider -->
+        <div class="control-block">
+          <div class="control-header">
+            <span class="control-title">24h Design Storm / Cloudburst (P)</span>
+            <span class="control-value" id="val-rain">180 mm</span>
+          </div>
+          <div class="control-hint">
+            <strong>Precipitation (P):</strong> Total rainfall falling in 24 hours (from normal rain to extreme cloudburst).
+          </div>
+          <input type="range" id="slider-rain" min="50" max="350" value="180" step="10" oninput="updateSimulation()">
+        </div>
+
+        <!-- 2. Curve Number Slider -->
+        <div class="control-block">
+          <div class="control-header">
+            <span class="control-title">Surface Waterproof Score (Curve Number CN)</span>
+            <span class="control-value" id="val-cn">78</span>
+          </div>
+          <div class="control-hint">
+            <strong>Curve Number (CN):</strong> Runoff score from 30 to 100. Higher numbers (88+) mean asphalt concrete roads where rain cannot soak in.
+          </div>
+          <input type="range" id="slider-cn" min="50" max="95" value="78" step="1" oninput="updateSimulation()">
+        </div>
+
+        <!-- 3. Green Infrastructure Sandbox Toggles -->
+        <div class="control-block">
+          <div class="control-header">
+            <span class="control-title">Sponge City Interventions</span>
+            <span class="control-value" style="color: var(--success-light);" id="val-mitigated-cut">-52% Cut</span>
+          </div>
+          <div class="control-hint">
+            Toggle nature-based solutions to capture stormwater and reduce peak flood discharge:
+          </div>
+          <div class="intervention-list">
+            <label class="intervention-item">
+              <input type="checkbox" id="chk-basin" checked onchange="updateSimulation()">
+              <div class="intervention-info">
+                <div class="intervention-name">
+                  <span>Smart Retention Basin Vaults</span>
+                  <span class="intervention-cost">₹75 Lakhs (-28%)</span>
+                </div>
+                <div class="intervention-desc">Underground tanks to store surging stormwater.</div>
+              </div>
+            </label>
+
+            <label class="intervention-item">
+              <input type="checkbox" id="chk-swale" checked onchange="updateSimulation()">
+              <div class="intervention-info">
+                <div class="intervention-name">
+                  <span>Roadside Permeable Bioswales</span>
+                  <span class="intervention-cost">₹40 Lakhs (-15%)</span>
+                </div>
+                <div class="intervention-desc">Vegetated ditches that let water soak into the soil.</div>
+              </div>
+            </label>
+
+            <label class="intervention-item">
+              <input type="checkbox" id="chk-park" checked onchange="updateSimulation()">
+              <div class="intervention-info">
+                <div class="intervention-name">
+                  <span>Urban Sponge Infiltration Parks</span>
+                  <span class="intervention-cost">₹50 Lakhs (-12%)</span>
+                </div>
+                <div class="intervention-desc">Porous green parks that recharge groundwater.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Live Telemetry & Hydrology Metrics Cards Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <span class="metric-label">Direct Runoff Depth (Q)</span>
+        <span class="metric-value metric-highlight-danger" id="card-runoff-depth">112.4 mm</span>
+        <span class="metric-subtext">Excess water flowing over surface (Q = (P-Ia)²/(P-Ia+S))</span>
+      </div>
+
+      <div class="metric-card">
+        <span class="metric-label">Total Runoff Volume (V)</span>
+        <span class="metric-value" id="card-runoff-vol">112.4 ML</span>
+        <span class="metric-subtext">112,400 m³ of floodwater generated across ward</span>
+      </div>
+
+      <div class="metric-card">
+        <span class="metric-label">Peak Discharge Flow (qp)</span>
+        <span class="metric-value metric-highlight-danger" id="card-peak-flow">15.6 m³/s</span>
+        <span class="metric-subtext">Maximum volume of floodwater rushing through drains</span>
+      </div>
+
+      <div class="metric-card">
+        <span class="metric-label">Municipal ROI (Damages Averted)</span>
+        <span class="metric-value metric-highlight-success" id="card-roi">+440% Net ROI</span>
+        <span class="metric-subtext">₹1.65 Cr Invested ➔ ₹8.91 Cr Damages Averted</span>
+      </div>
+    </div>
+
+    <!-- Hydrograph & Technical Balance Table Row -->
+    <div class="data-row">
+      <!-- 24h Dynamic Hydrograph Canvas -->
+      <div class="data-card">
+        <div class="data-card-title">
+          <span>📈 24-Hour Storm Hydrograph (Peak Shaving & Delay)</span>
+          <span style="font-size: 11px; color: var(--accent-light);">USDA SCS Type-II Storm</span>
+        </div>
+        <canvas id="hydrograph-canvas"></canvas>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
+          <span style="color: #EF4444;">■ Unmitigated Inflow Surge</span>
+          <span style="color: #10B981;">■ Mitigated Attenuated Outflow (-52% Shaved)</span>
+          <span>Time of Concentration (Tc): 2.0h</span>
+        </div>
+      </div>
+
+      <!-- Water Balance & Intervention Budget Table -->
+      <div class="data-card">
+        <div class="data-card-title">
+          <span>📋 Municipal Civil Engineering Budget & Impact Summary</span>
+          <span style="font-size: 11px; color: var(--text-muted);">CPWD Rate Aligned</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Civil Intervention Line Item</th>
+              <th>Runoff Reduction</th>
+              <th>Capital Cost</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Smart Stormwater Retention Basin & Sluice Vault</td>
+              <td><strong>-28%</strong></td>
+              <td>₹75 Lakhs</td>
+              <td><span style="color: var(--success-light);">● Sanctioned</span></td>
+            </tr>
+            <tr>
+              <td>Roadside Permeable Bioswales & Gravel Infiltration</td>
+              <td><strong>-15%</strong></td>
+              <td>₹40 Lakhs</td>
+              <td><span style="color: var(--success-light);">● Sanctioned</span></td>
+            </tr>
+            <tr>
+              <td>Urban Sponge Park & Native Flora Basin</td>
+              <td><strong>-12%</strong></td>
+              <td>₹50 Lakhs</td>
+              <td><span style="color: var(--success-light);">● Sanctioned</span></td>
+            </tr>
+            <tr style="background: rgba(255,255,255,0.03); font-weight: 700;">
+              <td>Total Capital Investment vs Disaster Savings</td>
+              <td style="color: var(--success-light);">-52% Attenuated</td>
+              <td style="color: #FFFFFF;">₹1.65 Crores</td>
+              <td style="color: var(--warning);">₹8.91 Cr Saved</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- DPR Modal -->
+  <div class="modal-backdrop" id="dpr-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div style="font-size: 15px; font-weight: 700; color: #FFFFFF;">
+          📄 Statutory Municipal Detailed Project Report (DPR)
+        </div>
+        <button class="close-btn" onclick="closeDprModal()">✕</button>
+      </div>
+      <div style="font-size: 12.5px; line-height: 1.6; color: #CBD5E1;">
+        <p><strong>Project Name:</strong> Climate-Adaptive Stormwater Retention & Urban Catchment Defense</p>
+        <p><strong>Target Ward:</strong> <span id="modal-ward-name">Trichy Pilot Ward (Cauvery River Basin)</span></p>
+        <p><strong>Cadastral Area:</strong> <span id="modal-ward-area">100.0 Hectares (1.00 km²)</span></p>
+        <hr style="border: 0; border-top: 1px solid var(--border); margin: 12px 0;">
+
+        <div style="font-weight: 700; color: #FFFFFF; margin-bottom: 6px;">1. Hydrological Findings (USDA SCS-CN Analysis):</div>
+        <ul style="margin-left: 20px; margin-bottom: 12px;">
+          <li>Simulated 24h Precipitation: <span id="modal-rain-text" style="color: var(--accent-light); font-weight: 700;">180.0 mm</span></li>
+          <li>Surface Runoff Volume: <span id="modal-vol-text" style="color: var(--danger-light); font-weight: 700;">112.4 Million Liters</span></li>
+          <li>Submerged Hazard Area: <span id="modal-area-text" style="color: var(--danger-light); font-weight: 700;">24.5 Hectares</span></li>
+        </ul>
+
+        <div style="font-weight: 700; color: #FFFFFF; margin-bottom: 6px;">2. Sanctioned Municipal Interventions:</div>
+        <ul style="margin-left: 20px; margin-bottom: 14px;">
+          <li>Smart Retention Basin: ₹75 Lakhs (-28% Runoff)</li>
+          <li>Permeable Bioswales: ₹40 Lakhs (-15% Runoff)</li>
+          <li>Sponge Infiltration Parks: ₹50 Lakhs (-12% Runoff)</li>
+          <li><strong>Total Budget Sanction:</strong> <span style="color: var(--success-light); font-weight: 700;">₹1.65 Crores</span></li>
+          <li><strong>Projected Damages Averted:</strong> <span style="color: var(--warning); font-weight: 700;">₹8.91 Crores (+440% Net ROI)</span></li>
+        </ul>
+
+        <hr style="border: 0; border-top: 1px solid var(--border); margin: 12px 0;">
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); margin-top: 15px;">
+          <span>Chief Engineer (Stormwater Drainage Division)</span>
+          <span>Municipal Commissioner Sign-Off</span>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button class="action-btn" onclick="window.print()">🖨️ Print Statutory Document</button>
+        <button class="action-btn action-btn-primary" onclick="closeDprModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CITIES = {
+      trichy: { name: 'Trichy Pilot Ward', area: 100.0, pop: 6000, baseRain: 180, baseCN: 78, elevation: 84 },
+      mumbai: { name: 'Mumbai Coastal Ward', area: 145.0, pop: 12500, baseRain: 220, baseCN: 88, elevation: 12 },
+      chennai: { name: 'Chennai Delta Ward', area: 120.0, pop: 9800, baseRain: 200, baseCN: 85, elevation: 8 },
+      bangalore: { name: 'Bangalore Lake Ward', area: 110.0, pop: 8200, baseRain: 150, baseCN: 76, elevation: 920 },
+      delhi: { name: 'Delhi NCR Ward', area: 130.0, pop: 11000, baseRain: 140, baseCN: 82, elevation: 215 },
+      kolkata: { name: 'Kolkata Delta Ward', area: 115.0, pop: 10200, baseRain: 210, baseCN: 86, elevation: 9 }
+    };
+
+    let currentCityKey = 'trichy';
+
+    function setCity(key, btn) {
+      currentCityKey = key;
+      document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const c = CITIES[key];
+      document.getElementById('active-ward-name').innerText = `(${c.name}: ${c.area} Ha)`;
+      document.getElementById('slider-rain').value = c.baseRain;
+      document.getElementById('slider-cn').value = c.baseCN;
+
+      updateSimulation();
+    }
+
+    function setLayer(type, btn) {
+      document.querySelectorAll('.layer-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const grid = document.getElementById('gis-grid');
+      if (type === 'thermal') {
+        grid.style.background = 'radial-gradient(circle at 40% 45%, rgba(220, 38, 38, 0.4) 0%, rgba(217, 119, 6, 0.25) 40%, #060D20 70%)';
+      } else if (type === 'terrain') {
+        grid.style.background = 'radial-gradient(circle at 60% 30%, rgba(37, 99, 235, 0.25) 0%, rgba(5, 150, 105, 0.2) 40%, #060D20 75%)';
+      } else {
+        grid.style.background = 'none';
+      }
+    }
+
+    function updateSimulation() {
+      const c = CITIES[currentCityKey];
+      const P = parseFloat(document.getElementById('slider-rain').value);
+      const CN = parseFloat(document.getElementById('slider-cn').value);
+
+      document.getElementById('val-rain').innerText = `${P} mm`;
+      document.getElementById('val-cn').innerText = `${CN}`;
+
+      // USDA SCS-CN Formula
+      const S = (25400.0 / CN) - 254.0;
+      const Ia = 0.2 * S;
+      let Q = 0.0;
+      if (P > Ia) {
+        Q = Math.pow(P - Ia, 2) / (P - Ia + S);
+      }
+
+      const areaHa = c.area;
+      const areaM2 = areaHa * 10000.0;
+      const volumeM3 = (Q / 1000.0) * areaM2;
+      const volumeML = volumeM3 / 1000.0;
+
+      const Tc = Math.max(0.5, Math.min(3.0, 0.4 * Math.pow(areaHa, 0.35)));
+      const peakFlow = volumeM3 / (Tc * 3600.0);
+
+      // Checkbox interventions
+      let totalReductionPct = 0;
+      if (document.getElementById('chk-basin').checked) totalReductionPct += 28;
+      if (document.getElementById('chk-swale').checked) totalReductionPct += 15;
+      if (document.getElementById('chk-park').checked) totalReductionPct += 12;
+
+      document.getElementById('val-mitigated-cut').innerText = `-${totalReductionPct}% Cut`;
+
+      // Update Metric Cards
+      document.getElementById('card-runoff-depth').innerText = `${Q.toFixed(1)} mm`;
+      document.getElementById('card-runoff-vol').innerText = `${volumeML.toFixed(1)} ML`;
+      document.getElementById('card-peak-flow').innerText = `${peakFlow.toFixed(1)} m³/s`;
+
+      // Hazard calculations
+      const hazardHa = Math.min(areaHa, areaHa * (Q / Math.max(40, P))).toFixed(1);
+      const citizensExposed = Math.round(hazardHa * (c.pop / areaHa) * (Q > 80 ? 1.2 : 0.8));
+
+      document.getElementById('hazard-title').innerText = `Unmitigated Flood Hazard: ${hazardHa} Ha`;
+      document.getElementById('hazard-sub').innerText = `Water Depth: ${(Q/100).toFixed(2)}m • ${citizensExposed.toLocaleString()} Citizens Exposed`;
+
+      const mitigatedHa = (hazardHa * (1 - totalReductionPct / 100)).toFixed(1);
+      document.getElementById('mitigated-title').innerText = `Mitigated Sponge Catchment: ${mitigatedHa} Ha`;
+      document.getElementById('mitigated-sub').innerText = `Water Depth: ${((Q/100)*(1 - totalReductionPct/100)).toFixed(2)}m • -${totalReductionPct}% Runoff Cut`;
+
+      // Polygon box scaling
+      const floodScale = Math.min(88, Math.max(30, (hazardHa / areaHa) * 100));
+      document.getElementById('flood-poly').style.width = `${floodScale}%`;
+      document.getElementById('flood-poly').style.height = `${floodScale}%`;
+
+      const spongeScale = Math.min(88, Math.max(20, (mitigatedHa / areaHa) * 100));
+      document.getElementById('sponge-poly').style.width = `${spongeScale}%`;
+      document.getElementById('sponge-poly').style.height = `${spongeScale}%`;
+
+      // Modal info sync
+      document.getElementById('modal-ward-name').innerText = `${c.name} (${c.catchment || 'Catchment Basin'})`;
+      document.getElementById('modal-ward-area').innerText = `${areaHa} Hectares`;
+      document.getElementById('modal-rain-text').innerText = `${P} mm`;
+      document.getElementById('modal-vol-text').innerText = `${volumeML.toFixed(1)} Million Liters`;
+      document.getElementById('modal-area-text').innerText = `${hazardHa} Hectares`;
+
+      drawHydrograph(peakFlow, totalReductionPct);
+    }
+
+    function drawHydrograph(peakFlow, reductionPct) {
+      const canvas = document.getElementById('hydrograph-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.offsetWidth;
+      const h = canvas.height = canvas.offsetHeight;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw Grid lines
+      ctx.strokeStyle = '#2A3B75';
+      ctx.lineWidth = 1;
+      for (let i = 1; i <= 4; i++) {
+        const y = (h / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(30, y);
+        ctx.lineTo(w - 10, y);
+        ctx.stroke();
+      }
+
+      const points = 30;
+      const maxVal = Math.max(20, peakFlow * 1.3);
+
+      // Curve 1: Raw Inflow (Red)
+      ctx.beginPath();
+      ctx.strokeStyle = '#EF4444';
+      ctx.lineWidth = 2.5;
+      for (let i = 0; i <= points; i++) {
+        const t = (i / points) * 24;
+        const x = 30 + (i / points) * (w - 45);
+        // Gaussian hydrograph shape centered at 12 hours
+        const val = peakFlow * Math.exp(-Math.pow(t - 11, 2) / 14);
+        const y = h - 20 - (val / maxVal) * (h - 40);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Curve 2: Mitigated Outflow (Green)
+      const mitigatedPeak = peakFlow * (1 - reductionPct / 100);
+      ctx.beginPath();
+      ctx.strokeStyle = '#10B981';
+      ctx.lineWidth = 2.5;
+      for (let i = 0; i <= points; i++) {
+        const t = (i / points) * 24;
+        const x = 30 + (i / points) * (w - 45);
+        // Shifted and flattened hydrograph (crest delay to 14.5 hours)
+        const val = mitigatedPeak * Math.exp(-Math.pow(t - 14.5, 2) / 24);
+        const y = h - 20 - (val / maxVal) * (h - 40);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Axis labels
+      ctx.fillStyle = '#94A3B8';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('0h', 30, h - 6);
+      ctx.fillText('12h Peak', w / 2 - 15, h - 6);
+      ctx.fillText('24h', w - 30, h - 6);
+      ctx.fillText(`${peakFlow.toFixed(0)}m³/s`, 4, 18);
+    }
+
+    // Draggable Split Slicer logic
+    const slicerBar = document.getElementById('slicer-bar');
+    const paneBefore = document.getElementById('pane-before');
+    const paneAfter = document.getElementById('pane-after');
+    const mapContainer = document.getElementById('map-container');
+    let isDragging = false;
+
+    function handleSlicerMove(clientX) {
+      const rect = mapContainer.getBoundingClientRect();
+      let pct = ((clientX - rect.left) / rect.width) * 100;
+      pct = Math.max(5, Math.min(95, pct));
+
+      slicerBar.style.left = `${pct}%`;
+      paneBefore.style.clipPath = `polygon(0 0, ${pct}% 0, ${pct}% 100%, 0 100%)`;
+      paneAfter.style.clipPath = `polygon(${pct}% 0, 100% 0, 100% 100%, ${pct}% 100%)`;
+    }
+
+    slicerBar.addEventListener('mousedown', () => isDragging = true);
+    window.addEventListener('mouseup', () => isDragging = false);
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      handleSlicerMove(e.clientX);
+    });
+
+    // Touch support
+    slicerBar.addEventListener('touchstart', () => isDragging = true);
+    window.addEventListener('touchend', () => isDragging = false);
+    window.addEventListener('touchmove', (e) => {
+      if (!isDragging || !e.touches[0]) return;
+      handleSlicerMove(e.touches[0].clientX);
+    });
+
+    function openDprModal() {
+      document.getElementById('dpr-modal').style.display = 'flex';
+    }
+
+    function closeDprModal() {
+      document.getElementById('dpr-modal').style.display = 'none';
+    }
+
+    // Initialize on page load
+    window.addEventListener('load', () => {
+      updateSimulation();
+      window.addEventListener('resize', () => {
+        const c = CITIES[currentCityKey];
+        const P = parseFloat(document.getElementById('slider-rain').value);
+        const CN = parseFloat(document.getElementById('slider-cn').value);
+        const S = (25400.0 / CN) - 254.0;
+        const Ia = 0.2 * S;
+        let Q = P > Ia ? Math.pow(P - Ia, 2) / (P - Ia + S) : 0;
+        const peakFlow = ((Q / 1000) * c.area * 10000) / (2.0 * 3600);
+        let redPct = 0;
+        if (document.getElementById('chk-basin').checked) redPct += 28;
+        if (document.getElementById('chk-swale').checked) redPct += 15;
+        if (document.getElementById('chk-park').checked) redPct += 12;
+        drawHydrograph(peakFlow, redPct);
+      });
+    });
+  </script>
+</body>
+</html>
