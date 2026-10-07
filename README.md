@@ -524,44 +524,7 @@ python backend/test_system.py
 
 ---
 
-## 🎯 14. Judge & Faculty Defense Q&A Bible (Top 10 Technical Questions)
-
-#### Q1: Why did you use USDA SCS-CN instead of a machine learning neural network for flood modeling?
-> **Answer:** Machine learning models for flood depth suffer from hallucination, lack physical conservation of mass, and are uninterpretable "black boxes" rejected by civil engineering bodies. The **USDA SCS-CN (NEH-4)** model is the statutory standard mandated by the **Central Water Commission (CWC), Government of India**. It is 100% deterministic, physically bounded, explainable, and accepts direct spatial land cover inputs.
-
-#### Q2: How does TerraSense work when satellite connections or internet fail during a disaster?
-> **Answer:** TerraSense employs an **Edge-Calibrated Spatial Tensor Architecture**. Regional baseline tensors (NASA GPM, MODIS LST, SRTM DEM) are cached with Inverse Distance Weighting (IDW) interpolation. The core hydrological solver executes locally in **sub-50ms** with zero external cloud dependencies.
-
-#### Q3: What is the mathematical justification for Inverse Distance Weighting (IDW)?
-> **Answer:** IDW assigns weights to telemetry points inversely proportional to their squared distance ($w_i = 1/d_i^2$). For urban micro-catchments (100–500 Ha), rainfall and elevation exhibit strong spatial autocorrelation (Tobler’s First Law of Geography). IDW provides smooth, computationally light ($O(N)$) spatial interpolation without requiring heavy kriging semivariograms.
-
-#### Q4: How are the 3-Tier Flood Hazard Zones computed on the map?
-> **Answer:** TerraSense maps concentric risk zones based on calculated runoff depth and SRTM 30m terrain hollows:
-> - **Critical Red ($>1.0\text{m}$ depth):** Low-lying drainage depressions where rushing water poses immediate structural and life risk.
-> - **Moderate Orange ($0.5\text{--}1.0\text{m}$ depth):** Inundated road networks and ground-floor properties.
-> - **Minor Yellow ($<0.5\text{m}$ depth):** Sheet flow ponding on asphalt and footpaths.
-
-#### Q5: How is the 4.85 Benefit-Cost Ratio (BCR) calculated?
-> **Answer:** Capital costs (CAPEX) are itemized using the **CPWD Delhi Schedule of Rates (DSR 2023)** (e.g., ₹75L for retention vaults, ₹40L for bioswales, ₹50L for sponge parks = ₹1.65 Cr). Avoided damages (residential flood repair, commercial loss, road reconstruction) total ₹8.91 Cr. $\text{BCR} = \frac{₹8.91\text{ Cr}}{₹1.65\text{ Cr}} = \mathbf{4.85}$, yielding a **+440% Net Municipal ROI**.
-
-#### Q6: How does the system model future climate conditions 30 years out?
-> **Answer:** TerraSense models thermodynamic Clausius-Clapeyron scaling ($+7\% \text{ moisture per } +1^\circ\text{C}$). Under IPCC SSP2-4.5 ($+1.8^\circ\text{C}$), cloudburst rainfall surges $+12\%$; under SSP5-8.5 ($+3.8^\circ\text{C}$), rainfall surges $+27\%$. The platform also simulates urban concretization ($CN$ rising from 78 to 91).
-
-#### Q7: How does green sponge infrastructure delay the flood crest?
-> **Answer:** By introducing bioswales, detention vaults, and permeable ground, surface roughness increases and storage is introduced. This increases the catchment's **Time of Concentration ($T_c$)** from $2.0\text{ hours}$ to $4.5\text{ hours}$, cutting peak discharge $q_p$ from $16.06\text{ m}^3/\text{s}$ down to $7.23\text{ m}^3/\text{s}$ (-57% peak shaving).
-
-#### Q8: What prevents unauthorized users from spamming the Twilio voice webhook?
-> **Answer:** `helpline.py` implements Twilio's cryptographic `RequestValidator` which hashes the incoming request payload using `TWILIO_AUTH_TOKEN` and validates the `X-Twilio-Signature` header before executing TwiML speech synthesis.
-
-#### Q9: How does the safe shelter router determine evacuation destinations?
-> **Answer:** It analyzes the SRTM 30m Digital Elevation Model within a 3km radius to identify topographic high-ground ridges ($+94\text{m MSL}$) outside the 3-tier flood hazard zone, routing citizens away from submerged drainage corridors.
-
-#### Q10: Is citizen data private under Indian law?
-> **Answer:** Yes. TerraSense processes call records locally in-memory and does not transmit confidential citizen location coordinates or municipal cadastre layers to public cloud AI APIs, strictly conforming to the **Digital Personal Data Protection (DPDP) Act 2023** and **ISO/IEC 27001**.
-
----
-
-## 👥 15. Team & Acknowledgments
+## 👥 14. Team & Acknowledgments
 
 - **Project:** TerraSense — Climate-Adaptive Urban Digital Twin
 - **Course / Initiative:** Innovative Design Project (IDP)
