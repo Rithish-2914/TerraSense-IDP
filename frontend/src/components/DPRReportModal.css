@@ -1,0 +1,353 @@
+/* ==========================================================================
+   Detailed Project Report (DPR) - Modal & Print Styles
+   ========================================================================== */
+
+.dpr-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.dpr-modal {
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #CBD5E1;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Top Action Bar */
+.dpr-top-actions {
+  background: #0F172A;
+  color: #FFFFFF;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1E293B;
+  flex-shrink: 0;
+}
+
+.dpr-top-actions-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dpr-status-badge {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dpr-report-id {
+  font-family: monospace;
+  font-size: 11px;
+  color: #94A3B8;
+}
+
+.dpr-top-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dpr-print-btn {
+  background: #2563EB;
+  color: #FFFFFF;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.dpr-print-btn:hover {
+  background: #1D4ED8;
+}
+
+.dpr-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #FFFFFF;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Printable Document Body */
+.dpr-document-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 36px 40px;
+  background: #FFFFFF;
+  color: #0F172A;
+}
+
+/* Document Header */
+.dpr-doc-header {
+  border-bottom: 2px solid #0F172A;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.dpr-doc-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.dpr-emblem-text h3 {
+  font-size: 12px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 2px 0;
+  letter-spacing: 0.4px;
+}
+
+.dpr-emblem-text h4 {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748B;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.dpr-doc-meta {
+  font-size: 10.5px;
+  color: #475569;
+  text-align: right;
+  line-height: 1.4;
+}
+
+.dpr-doc-title-box {
+  text-align: center;
+  padding: 8px 0;
+}
+
+.dpr-doc-title-box h1 {
+  font-size: 20px;
+  font-weight: 900;
+  color: #0F172A;
+  letter-spacing: 0.8px;
+  margin: 0 0 4px 0;
+}
+
+.dpr-doc-title-box h2 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin: 0 0 8px 0;
+}
+
+.dpr-target-ward {
+  font-size: 12px;
+  color: #0F172A;
+  background: #F8FAFC;
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 4px;
+  border: 1px solid #E2E8F0;
+}
+
+/* Document Section */
+.dpr-section {
+  margin-bottom: 24px;
+}
+
+.dpr-sec-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0F172A;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+
+.dpr-para {
+  font-size: 11.5px;
+  color: #334155;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+/* Metric Grid */
+.dpr-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.dpr-metric-card {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dpr-m-lbl {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 2px;
+}
+
+.dpr-m-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+/* Tables */
+.dpr-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-bottom: 12px;
+  border: 1px solid #E2E8F0;
+}
+
+.dpr-table th {
+  background: #F1F5F9;
+  color: #0F172A;
+  font-weight: 700;
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid #CBD5E1;
+}
+
+.dpr-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid #E2E8F0;
+  color: #334155;
+}
+
+.dpr-table-total {
+  background: #F8FAFC;
+  border-top: 2px solid #CBD5E1;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+/* Sign-off Section */
+.dpr-signoff-section {
+  margin-top: 30px;
+  page-break-inside: avoid;
+}
+
+.dpr-sign-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.dpr-sign-box {
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 12px;
+  background: #F8FAFC;
+  text-align: center;
+}
+
+.dpr-sign-line {
+  height: 40px;
+  border-bottom: 1px dashed #94A3B8;
+  margin-bottom: 8px;
+}
+
+.dpr-sign-name {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.dpr-sign-dept {
+  font-size: 9.5px;
+  color: #64748B;
+  margin-bottom: 4px;
+}
+
+.dpr-sign-seal {
+  font-size: 9px;
+  color: #94A3B8;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* ==========================================================================
+   Print Rules - Clean A4 Document Output
+   ========================================================================== */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  .dpr-backdrop,
+  .dpr-modal,
+  .dpr-document-body,
+  .dpr-document-body * {
+    visibility: visible !important;
+  }
+
+  .dpr-backdrop {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  .dpr-modal {
+    max-width: 100% !important;
+    max-height: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .dpr-document-body {
+    padding: 20px 24px !important;
+    overflow: visible !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
